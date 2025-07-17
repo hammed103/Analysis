@@ -1,0 +1,65 @@
+name: Deploy to Streamlit Cloud
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test data processor
+      run: |
+        python -c "
+        import pandas as pd
+        from data_processor import EVAdvertAnalyzer
+        
+        # Test with sample data
+        try:
+            analyzer = EVAdvertAnalyzer('sample_data.csv')
+            print('✅ Data processor test passed')
+            print(f'Loaded {len(analyzer.df)} records')
+            print(f'Filtered to {len(analyzer.df_filtered)} target records')
+        except Exception as e:
+            print(f'❌ Data processor test failed: {e}')
+            exit(1)
+        "
+    
+    - name: Test dashboard imports
+      run: |
+        python -c "
+        try:
+            import streamlit as st
+            import plotly.express as px
+            from data_processor import EVAdvertAnalyzer
+            print('✅ All imports successful')
+        except Exception as e:
+            print(f'❌ Import test failed: {e}')
+            exit(1)
+        "
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy notification
+      run: |
+        echo "🚀 Ready for Streamlit Cloud deployment"
+        echo "Visit https://share.streamlit.io/ to deploy this repository"

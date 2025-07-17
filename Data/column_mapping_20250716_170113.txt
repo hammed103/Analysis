@@ -1,0 +1,27 @@
+MERGED DATASET COLUMN MAPPING
+========================================
+
+Columns in merged dataset:
+ 1. ad_archive_id
+ 2. ad_description
+ 3. ad_title
+ 4. advertiser_domain
+ 5. advertiser_name
+ 6. creative_id
+ 7. cta_text
+ 8. end_date
+ 9. image_url
+10. impressions_lower
+11. impressions_upper
+12. matched_car_models
+13. ocr_text
+14. openai_analysis
+15. page_like_count
+16. page_name
+17. platform_type
+18. reach_estimate
+19. region_code
+20. region_info
+21. source_platform
+22. spend
+23. start_date
