@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
 import re
+import os
+import glob
+import json
 from typing import Dict, List, Tuple, Optional
 from collections import defaultdict, Counter
-import json
 
 
 class EVAdvertAnalyzer:
@@ -13,7 +15,7 @@ class EVAdvertAnalyzer:
     """
 
     def __init__(self, csv_path: str):
-        """Initialize with the path to the CSV data file"""
+        """Initialize with the path to the CSV data file or directory"""
         self.csv_path = csv_path
         self.df = None
         # Normalize country codes - combine similar references
@@ -30,12 +32,67 @@ class EVAdvertAnalyzer:
     def load_data(self):
         """Load and preprocess the CSV data"""
         try:
-            self.df = pd.read_csv(self.csv_path)
-            print(f"Loaded {len(self.df)} records from {self.csv_path}")
+            # Check if path is a directory (for split data)
+            if os.path.isdir(self.csv_path):
+                self._load_from_directory()
+            else:
+                # Load single file
+                self.df = pd.read_csv(self.csv_path)
+                print(f"Loaded {len(self.df)} records from {self.csv_path}")
+
             self._preprocess_data()
         except Exception as e:
             print(f"Error loading data: {e}")
             raise
+
+    def _load_from_directory(self):
+        """Load data from multiple CSV chunks in a directory"""
+        import glob
+        import json
+
+        # Initialize empty DataFrame
+        self.df = pd.DataFrame()
+
+        # Check for metadata file first
+        metadata_path = os.path.join(self.csv_path, "chunks_metadata.json")
+        if os.path.exists(metadata_path):
+            try:
+                with open(metadata_path, "r") as f:
+                    metadata = json.load(f)
+
+                # Load chunks in order
+                for chunk_file in metadata["chunk_files"]:
+                    chunk_path = os.path.join(self.csv_path, chunk_file)
+                    if os.path.exists(chunk_path):
+                        chunk_df = pd.read_csv(chunk_path)
+                        self.df = pd.concat([self.df, chunk_df], ignore_index=True)
+                        print(f"Loaded chunk {chunk_file}: {len(chunk_df)} records")
+
+                print(
+                    f"Loaded {len(self.df)} total records from {len(metadata['chunk_files'])} chunks"
+                )
+                return
+            except Exception as e:
+                print(f"Error loading from metadata: {e}")
+                # Fall back to loading all CSV files
+
+        # Find all CSV files in the directory
+        csv_files = glob.glob(os.path.join(self.csv_path, "*.csv"))
+
+        if not csv_files:
+            raise FileNotFoundError(f"No CSV files found in {self.csv_path}")
+
+        # Load each CSV file and concatenate
+        for csv_file in sorted(csv_files):
+            # Skip metadata file
+            if os.path.basename(csv_file) == "chunks_metadata.json":
+                continue
+
+            chunk_df = pd.read_csv(csv_file)
+            self.df = pd.concat([self.df, chunk_df], ignore_index=True)
+            print(f"Loaded {os.path.basename(csv_file)}: {len(chunk_df)} records")
+
+        print(f"Loaded {len(self.df)} total records from {len(csv_files)} files")
 
     def _preprocess_data(self):
         """Preprocess the data for analysis"""

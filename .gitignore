@@ -5,7 +5,7 @@ __pycache__/
 Forums/
 # C extensions
 *.so
-!work.csv
+work.csv
 # Distribution / packaging
 .Python
 build/
@@ -132,9 +132,9 @@ dmypy.json
 .streamlit/
 
 # Data files (large CSV files)
-*.csv
-Data/*.csv
-data/*.csv
+#*.csv
+#Data/*.csv
+#data/*.csv
 
 # Jupyter notebooks
 *.ipynb

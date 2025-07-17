@@ -1,0 +1,13 @@
+{
+  "original_file": "work.csv",
+  "total_rows": 22876,
+  "chunk_size": 5000,
+  "num_chunks": 5,
+  "chunk_files": [
+    "work_chunk_001.csv",
+    "work_chunk_002.csv",
+    "work_chunk_003.csv",
+    "work_chunk_004.csv",
+    "work_chunk_005.csv"
+  ]
+}
