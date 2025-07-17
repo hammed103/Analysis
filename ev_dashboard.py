@@ -25,11 +25,11 @@ def load_data():
     """Load and cache the data"""
     # Priority order for data sources
     data_sources = [
-        "data",  # Split data directory (preferred for GitHub deployment)
+        "Data",  # Split data directory (preferred for GitHub deployment)
         "work.csv",  # Single file (local development)
         "Data/merged_ev_ads_dataset_20250716_171722.csv",
         "Data/merged_ev_ads_dataset_20250716_170109.csv",
-        "sample_data.csv",  # Demo data
+        "sample_data.csv",  # Demo data (lowest priority)
     ]
 
     for data_source in data_sources:
