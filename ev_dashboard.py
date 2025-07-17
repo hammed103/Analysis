@@ -23,17 +23,34 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     """Load and cache the data"""
-    csv_files = [
-        "work.csv",
+    # Priority order for data sources
+    data_sources = [
+        "data",  # Split data directory (preferred for GitHub deployment)
+        "work.csv",  # Single file (local development)
         "Data/merged_ev_ads_dataset_20250716_171722.csv",
         "Data/merged_ev_ads_dataset_20250716_170109.csv",
+        "sample_data.csv",  # Demo data
     ]
 
-    for file_path in csv_files:
-        if os.path.exists(file_path):
-            return EVAdvertAnalyzer(file_path)
+    for data_source in data_sources:
+        if os.path.exists(data_source):
+            try:
+                analyzer = EVAdvertAnalyzer(data_source)
+                if os.path.isdir(data_source):
+                    st.success(f"✅ Loaded data from {data_source}/ directory")
+                else:
+                    st.success(f"✅ Loaded data from {data_source}")
+                return analyzer
+            except Exception as e:
+                st.warning(f"⚠️ Failed to load {data_source}: {e}")
+                continue
 
-    st.error("No data file found. Please ensure one of the expected CSV files exists.")
+    st.error(
+        "❌ No valid data source found. Please ensure one of these exists:\n"
+        "- `data/` directory with split CSV files\n"
+        "- `work.csv` file\n"
+        "- `sample_data.csv` file"
+    )
     st.stop()
 
 

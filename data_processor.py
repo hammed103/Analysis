@@ -47,8 +47,6 @@ class EVAdvertAnalyzer:
 
     def _load_from_directory(self):
         """Load data from multiple CSV chunks in a directory"""
-        import glob
-        import json
 
         # Initialize empty DataFrame
         self.df = pd.DataFrame()
