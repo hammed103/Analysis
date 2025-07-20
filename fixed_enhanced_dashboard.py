@@ -704,15 +704,31 @@ def main():
                     category_counts = features_df["category"].value_counts()
                     # Remove "error" category and only include categories with 10 or more mentions
                     category_counts = category_counts[category_counts.index != "error"]
-                    filtered_categories = category_counts[category_counts >= 10]
+                    category_counts = category_counts[
+                        category_counts.index != "Analysis Themes"
+                    ]
+                    filtered_categories = category_counts[category_counts >= 12]
 
                     if len(filtered_categories) > 0:
                         fig_categories = px.bar(
                             x=filtered_categories.values,
                             y=filtered_categories.index,
                             orientation="h",
-                            title="Most Mentioned Feature Categories (10+ mentions)",
+                            title="Top Themes",
                         )
+
+                        # Customize the chart layout
+                        fig_categories.update_layout(
+                            xaxis_title="Number of Mentions",  # Remove x-axis title
+                            yaxis_title="Themes (Features)",  # Remove y-axis title
+                            yaxis=dict(
+                                tickmode="linear",  # Show all tick labels
+                                dtick=1,  # Show every category
+                            ),
+                            showlegend=False,
+                            margin=dict(l=20, r=20, t=40, b=20),
+                        )
+
                         st.plotly_chart(fig_categories, use_container_width=True)
                     else:
                         st.warning("No feature categories with 10+ mentions found")
@@ -752,9 +768,11 @@ def main():
                     aspect="auto",
                 )
                 fig_vehicle_features.update_layout(
-                    xaxis_title="Vehicle Model",
-                    yaxis_title="Feature Category",
+                    xaxis_title="Mentions",
+                    yaxis_title="Features",
                     height=500,
+                    xaxis=dict(tickmode="linear", tick0=0, dtick=1),
+                    yaxis=dict(tickmode="linear", tick0=0, dtick=1),
                 )
                 st.plotly_chart(fig_vehicle_features, use_container_width=True)
 
@@ -1415,7 +1433,16 @@ def main():
                         color=list(top_automotive_words.values()),
                         color_continuous_scale="viridis",
                     )
-                    fig_words.update_layout(height=600)
+
+                    # Add proper axis labels
+                    fig_words.update_layout(
+                        height=600,
+                        xaxis_title="Number of Mentions",
+                        yaxis_title="Automotive Terms",
+                        showlegend=False,
+                        margin=dict(l=20, r=20, t=60, b=40),
+                    )
+
                     st.plotly_chart(fig_words, use_container_width=True)
                 else:
                     st.info(
