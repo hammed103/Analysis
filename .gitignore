@@ -136,6 +136,13 @@ dmypy.json
 #Data/*.csv
 #data/*.csv
 
+# Large original dataset (keep local but don't track)
+ev_ads_complete_with_images_and_gender_20250720_100525.csv
+
+# Backup directories
+*backup*/
+removed_files_backup*/
+
 # Jupyter notebooks
 *.ipynb
 

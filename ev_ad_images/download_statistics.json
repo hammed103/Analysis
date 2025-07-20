@@ -1,0 +1,29 @@
+{
+  "total_images": 792,
+  "successful": 792,
+  "failed": 0,
+  "by_car_model": {
+    "Cupra_Born": 17,
+    "unknown": 1,
+    "Volkswagen_ID3": 27,
+    "Kia_EV3": 198,
+    "Volkswagen_ID4": 45,
+    "Renault_Megane_E-Tech": 25,
+    "Volvo_EX30": 5,
+    "Volkswagen_ID3_Volkswagen_ID4": 4,
+    "MG4": 15,
+    "Audi_Q4_e-tron": 57,
+    "BMW_iX3": 37,
+    "Tesla_Model_Y": 87,
+    "Hyundai_Ioniq_5": 269,
+    "BMW_iX1": 4,
+    "BMW_iX1_Tesla_Model_Y": 1
+  },
+  "by_advertiser": {
+    "unknown": 792
+  },
+  "start_time": "2025-07-07T21:10:46.693639",
+  "failed_downloads": [],
+  "end_time": "2025-07-07T21:36:46.828906",
+  "success_rate": 100.0
+}
